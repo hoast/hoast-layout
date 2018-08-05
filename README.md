@@ -5,10 +5,10 @@ Transform the content of files using layouts.
 
 ## Usage
 
-Install using [npm](https://npmjs.com).
+Install [hoast-layout](https://npmjs.com/package/hoast-layout) using [npm](https://npmjs.com).
 
 ```
-[$ npm install hoast-layout](https://www.npmjs.com/package/hoast-layout)
+$ npm install hoast-layout
 ```
 
 ### Parameters
@@ -74,4 +74,5 @@ If you are having problems with the module please [enable debugging](https://git
 * Check if the JSTransformer associated with the extension is installed.
 
 ## License
+
 [ISC license](https://github.com/hoast/hoast-layout/blob/master/LICENSE)
