@@ -22,7 +22,7 @@
     "url": "https://github.com/hoast/hoast-layout/issues"
   },
 	"peerDependencies": {
-		"hoast": "^0.0.0"
+		"hoast": "^0.0.1"
 	},
   "dependencies": {
     "inputformat-to-jstransformer": "^1.3.0",

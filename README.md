@@ -1,9 +1,15 @@
 # Hoast-layout
 Transform the content of files using layouts.
 
-> As the name suggest this is a [Hoast](https://github.com/hoast/hoast#readme) module. The module has been based of [metalsmith-layouts](https://github.com/metalsmith/metalsmith-layouts#readme).
+> As the name suggest this is a [hoast](https://github.com/hoast/hoast#readme) module. The module has been based of [metalsmith-layouts](https://github.com/metalsmith/metalsmith-layouts#readme).
 
 ## Usage
+
+Install using [npm](https://npmjs.com).
+
+```
+[$ npm install hoast-layout](https://www.npmjs.com/package/hoast-layout)
+```
 
 ### Parameters
 
