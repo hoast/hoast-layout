@@ -18,7 +18,7 @@ const transformers = {};
 const getTransformer = function(extension) {
 	// If transformer already cached return that.
 	if (extension in transformers) {
-		return transformers[clear];
+		return transformers[extension];
 	}
 	
 	// Retrieve the transformer if available.
