@@ -1,4 +1,5 @@
-# Hoast-layout
+# hoast-layout
+
 Transform the content of files using layouts.
 
 > As the name suggest this is a [hoast](https://github.com/hoast/hoast#readme) module. The module has been based of [metalsmith-layouts](https://github.com/metalsmith/metalsmith-layouts#readme).
@@ -19,8 +20,8 @@ $ npm install hoast-layout
 	* Required: `yes`
 * `options` **{{Object}}**: Options given to the [JSTransformer](https://github.com/jstransformers/jstransformer#readme).
 	* Default: `{}`
-* `patterns` **{Array of strings}**: An array of string which gets used to match files using glob patterns. See [nanomatch](https://github.com/micromatch/nanomatch#readme) for more details on the patterns.
-	* Default: `[]`
+* `patterns` **{Array|strings}**: A string or an array of strings which gets used to match files using glob patterns. See [nanomatch](https://github.com/micromatch/nanomatch#readme) for more details on the patterns.
+	* Required: `no`
 
 ### Example
 
