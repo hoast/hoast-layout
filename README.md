@@ -1,20 +1,8 @@
-<div align="center">
-  <a title="Version master branch" href="https://github.com/hoast/hoast-layout#readme" target="_blank" rel="noopener">
-    <img src="https://img.shields.io/github/package-json/v/hoast/hoast-layout.svg?label=master&style=flat-square"/>
-  </a>
-  <a title="Version npm package" href="https://npmjs.com/package/hoast-layout" target="_blank" rel="noopener">
-    <img src="https://img.shields.io/npm/v/hoast-layout.svg?label=npm&style=flat-square"/>
-  </a>
-  <a title="License agreement" href="https://github.com/hoast/hoast-layout/blob/master/LICENSE" target="_blank" rel="noopener">
-    <img src="https://img.shields.io/github/license/hoast/hoast-layout.svg?style=flat-square"/>
-  </a>
-  <a title="Travis-ci build statis" href="https://travis-ci.org/hoast/hoast-layout" target="_blank" rel="noopener">
-    <img src="https://img.shields.io/travis-ci/hoast/hoast-layout.svg?branch=master&style=flat-square"/>
-  </a>
-  <a title="Open issues on GitHub" href="https://github.com/hoast/hoast-layout/issues" target="_blank" rel="noopener">
-    <img src="https://img.shields.io/github/issues/hoast/hoast-layout.svg?style=flat-square"/>
-  </a>
-</div>
+[![Version master branch](https://img.shields.io/github/package-json/v/hoast/hoast-layout.svg?label=master&style=flat-square)](https://github.com/hoast/hoast-layout#readme)
+[![Version npm package](https://img.shields.io/npm/v/hoast-layout.svg?label=npm&style=flat-square)](https://npmjs.com/package/hoast-layout)
+[![License agreement](https://img.shields.io/github/license/hoast/hoast-layout.svg?style=flat-square)](https://github.com/hoast/hoast-layout/blob/master/LICENSE)
+[![Travis-ci build status](https://img.shields.io/travis-ci/hoast/hoast-layout.svg?branch=master&style=flat-square)](https://travis-ci.org/hoast/hoast-layout)
+[![Open issues on GitHub](https://img.shields.io/github/issues/hoast/hoast-layout.svg?style=flat-square)](https://github.com/hoast/hoast-layout/issues)
 
 # hoast-layout
 
