@@ -1,2 +1,9 @@
-# Editor
+# Style
 .editorconfig
+.eslintrc.json
+# Continious integration
+.travis.yml
+test.js
+test-src/
+# Documentation
+examples/

@@ -1,12 +1,12 @@
 // Node modules.
-const assert = require('assert'),
-	  { join } = require('path');
+const assert = require(`assert`),
+	{ join } = require(`path`);
 // Dependency modules.
-const jstransformer = require('jstransformer'),
-	  nanomatch = require('nanomatch'),
-	  totransformer = require('inputformat-to-jstransformer');
+const jstransformer = require(`jstransformer`),
+	nanomatch = require(`nanomatch`),
+	totransformer = require(`inputformat-to-jstransformer`);
 // If debug available require it.
-let debug; try { debug = require('debug')('hoast-layout'); } catch(error) { debug = function() {}; }
+let debug; try { debug = require(`debug`)(`hoast-layout`); } catch(error) { debug = function() {}; }
 
 // Cached transformers.
 const transformers = {};
@@ -30,16 +30,16 @@ const getTransformer = function(extension) {
 };
 
 const validateOptions = function(options) {
-	assert(typeof(options) === 'object', 'hoast.layout: options must be of type object.');
+	assert(typeof(options) === `object`, `hoast.layout: options must be of type object.`);
 	if (options.directory) {
-		assert(typeof(options.directory) === 'string', 'hoast-layout: directory must be of type string.');
+		assert(typeof(options.directory) === `string`, `hoast-layout: directory must be of type string.`);
 	}
-	assert(typeof(options.layout) === 'string', 'hoast-layout: layout is a required parameter and must be of type string.');
+	assert(typeof(options.layout) === `string`, `hoast-layout: layout is a required parameter and must be of type string.`);
 	if (options.options) {
-		assert(typeof(options.options) === 'object', 'hoast-layout: options must be of type object.');
+		assert(typeof(options.options) === `object`, `hoast-layout: options must be of type object.`);
 	}
 	if (options.patterns) {
-		assert(typeof(options.patterns) === 'string' || (Array.isArray(options.patterns) && options.patterns.length > 0 && typeof(options.patterns[0] === 'string')), 'hoast-layout: patterns must be of type string or an array of strings.');
+		assert(typeof(options.patterns) === `string` || (Array.isArray(options.patterns) && options.patterns.length > 0 && typeof(options.patterns[0] === `string`)), `hoast-layout: patterns must be of type string or an array of strings.`);
 	}
 };
 
@@ -53,7 +53,7 @@ module.exports = function(options) {
 	validateOptions(options);
 	debug(`Validated options.`);
 	options = Object.assign({
-		directory: '',
+		directory: ``,
 		options: {}
 	}, options);
 	
@@ -65,9 +65,9 @@ module.exports = function(options) {
 				return new Promise(function(resolve) {
 					debug(`Processing file: '${file.path}'.`);
 					
-					assert(file.content !== null, 'hoast-layout: No content found on file, read module needs to be called before this.');
+					assert(file.content !== null, `hoast-layout: No content found on file, read module needs to be called before this.`);
 					// Has to be a string and patterns if specified.
-					if (file.content.type !== 'string' || (options.patterns && !nanomatch.any(file.path, options.patterns))) {
+					if (file.content.type !== `string` || (options.patterns && !nanomatch.any(file.path, options.patterns))) {
 						debug(`File not valid for processing.`);
 						return resolve();
 					}
@@ -76,16 +76,17 @@ module.exports = function(options) {
 					// Get layout from rontmatter.
 					let layout = options.layout;
 					if (file.frontmatter && file.frontmatter.layout) {
-						assert(typeof(file.frontmatter.layout) === 'string', 'hoast-layout: layout specified in frontmatter must be of type string.');
+						assert(typeof(file.frontmatter.layout) === `string`, `hoast-layout: layout specified in frontmatter must be of type string.`);
+						layout = file.frontmatter.layout;
 					}
 					// Get layout extension.
 					layout = join(hoast.options.source, options.directory, layout);
 					debug(`Using layout '${layout}'.`);
 					
 					// Use given engine or retrieve transformer automatically.
-					const transformer = getTransformer(layout.split('.').pop());
+					const transformer = getTransformer(layout.split(`.`).pop());
 					if (!transformer) {
-						debug(`No valid transformer found for extension '${layout.split('.').pop()}'.`);
+						debug(`No valid transformer found for extension '${layout.split(`.`).pop()}'.`);
 						resolve();
 					}
 					
@@ -97,7 +98,7 @@ module.exports = function(options) {
 					
 					debug(`Rendered file.`);
 					resolve();
-				})
+				});
 			})
 		);
 	};
