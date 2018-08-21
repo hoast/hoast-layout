@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div align="center">
   <a title="Version master branch" href="https://github.com/hoast/hoast-layout#readme" target="_blank" rel="noopener">
     <img src="https://img.shields.io/github/package-json/v/hoast/hoast-layout.svg?label=master&style=flat-square"/>
   </a>
@@ -34,7 +34,7 @@ $ npm install hoast-layout
 
 * `directory` **{{String}}**: The directory containing the layouts.
 	* Default: ```` (root of the source directory).
-* `layout` **{String}**: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using an options named `layout`.
+* `layout` **{String}**: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using a field named `layout`.
 	* Required: `yes`
 * `options` **{{Object}}**: Options given to the [JSTransformer](https://github.com/jstransformers/jstransformer#readme).
 	* Default: `{}`
