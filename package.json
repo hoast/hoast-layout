@@ -1,7 +1,7 @@
 {
   "author": "Ron Dekker",
   "name": "hoast-layout",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Hoast module used to transform the content of files using layouts.",
   "license": "ISC",
   "keywords": [
