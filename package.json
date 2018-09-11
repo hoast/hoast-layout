@@ -22,7 +22,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "TODO:pretest": "eslint index.js test.js",
+    "pretest": "eslint index.js test.js",
     "test": "ava test.js --verbose"
   },
   "dependencies": {
