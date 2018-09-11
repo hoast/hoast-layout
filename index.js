@@ -94,8 +94,9 @@ module.exports = function(options) {
 					let layoutPath;
 					// Get layout extension.
 					if (typeof(options.directories) === `string`) {
-						layoutPath = join(hoast.options.source, options.directories, layout, options.extension);
+						layoutPath = join(hoast.options.source, options.directories, layout.concat(options.extension));
 						debug(`Testing accessible of layout at '${layout}'.`);
+						
 						try {
 							fs.accessSync(layoutPath, fs.constants.R_OK);
 						} catch(error) {
@@ -105,8 +106,9 @@ module.exports = function(options) {
 					} else {
 						// Search through directories.
 						for (let i = 0; i < options.directories.length; i++) {
-							layoutPath = join(hoast.options.source, options.directories[i], layout, options.extension);
+							layoutPath = join(hoast.options.source, options.directories[i], layout.concat(options.extension));
 							debug(`Testing accessible of layout at '${layoutPath}'.`);
+							
 							try {
 								// Check if this path yields results.
 								fs.accessSync(layoutPath, fs.constants.R_OK);
@@ -123,16 +125,16 @@ module.exports = function(options) {
 					debug(`Using layout at '${layoutPath}'.`);
 					
 					// Use given engine or retrieve transformer automatically.
-					const transformer = getTransformer(layout.split(`.`).pop());
+					const transformer = getTransformer(layoutPath.split(`.`).pop());
 					if (!transformer) {
-						debug(`No valid transformer found for extension '${layout.split(`.`).pop()}'.`);
+						debug(`No valid transformer found for extension '${layoutPath.split(`.`).pop()}'.`);
 						resolve();
 					}
 					
 					// Combine metadata and file data.
 					const data = Object.assign({}, hoast.options.metadata, file.frontmatter, { content: file.content.data });
 					// Override content and extension.
-					file.content.data = transformer.renderFile(layout, options.options, data).body;
+					file.content.data = transformer.renderFile(layoutPath, options.options, data).body;
 					
 					debug(`Rendered file.`);
 					resolve();

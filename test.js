@@ -1,4 +1,4 @@
-// Dependecy modules.
+// Dependency modules.
 const test = require(`ava`);
 // Custom module.
 const Layout = require(`.`);
@@ -6,7 +6,7 @@ const Layout = require(`.`);
 test(`layout`, async function(t) {
 	// Create module options.
 	const options = {
-		directory: `test-src`,
+		directories: `test-src`,
 		layout: `d.hbs`,
 		patterns: `**/*.html`
 	};
@@ -77,6 +77,7 @@ test(`layout`, async function(t) {
 			}
 		}
 	}, files);
+	
 	// Compare files.
 	t.deepEqual(files, filesOutcome);
 });
