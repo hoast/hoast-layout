@@ -20,14 +20,18 @@ $ npm install hoast-layout
 
 ### Parameters
 
-* `directory` **{{String}}**: The directory containing the layouts.
-	* Default: ```` (root of the source directory).
+* `directories` **{Array|string}**: A string or array of string leading to the directories containing the layouts. If an array is provided it will search through the directories in the given order and use the first valid result. If no directory is given it will assume the root source directory.
+	* Required: `no`
+* `extension` **{String}**: The extension of the layout. This option can be ignored and any extension can be provided by the default layout option or the frontmatter.
+  * Required: `no`
 * `layout` **{String}**: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using a field named `layout`.
 	* Required: `yes`
-* `options` **{{Object}}**: Options given to the [JSTransformer](https://github.com/jstransformers/jstransformer#readme).
+* `options` **{Object}**: Options given to the [JSTransformer](https://github.com/jstransformers/jstransformer#readme).
 	* Default: `{}`
-* `patterns` **{Array|strings}**: A string or an array of strings which gets used to match files using glob patterns. See [nanomatch](https://github.com/micromatch/nanomatch#readme) for more details on the patterns.
+* `patterns` **{Array|string}**: A string or an array of strings which gets used to match files using glob patterns. See [nanomatch](https://github.com/micromatch/nanomatch#readme) for more details on the patterns.
 	* Required: `no`
+
+> From 0.2.0 and up the `directory` option has been deprecated and is replaced by the `directories` option.
 
 ### Example
 

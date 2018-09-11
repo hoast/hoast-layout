@@ -1,5 +1,6 @@
 // Node modules.
 const assert = require(`assert`),
+	fs = require(`fs`),
 	{ join } = require(`path`);
 // Dependency modules.
 const jstransformer = require(`jstransformer`),
@@ -29,10 +30,14 @@ const getTransformer = function(extension) {
 	return transformers[extension];
 };
 
+/**
+ * Validates options' property types.
+ * @param {Object} options The module options.
+ */
 const validateOptions = function(options) {
 	assert(typeof(options) === `object`, `hoast.layout: options must be of type object.`);
-	if (options.directory) {
-		assert(typeof(options.directory) === `string`, `hoast-layout: directory must be of type string.`);
+	if (options.directories) {
+		assert(typeof(options.directories) === `string` || (Array.isArray(options.patterns) && options.patterns.length > 0 && typeof(options.patterns[0] === `string`)), `hoast-layout: directories must be of type string or an array of strings.`);
 	}
 	assert(typeof(options.layout) === `string`, `hoast-layout: layout is a required parameter and must be of type string.`);
 	if (options.options) {
@@ -50,10 +55,17 @@ const validateOptions = function(options) {
 module.exports = function(options) {
 	debug(`Initializing module.`);
 	
+	// Legacy support for the directory option.
+	if (options.directory && !options.directories) {
+		debug(`the 'directory' options has been deprecated and replaced with 'directories', see the documentation for more information.`);
+		options.directories = options.directory;
+	}
+	
 	validateOptions(options);
 	debug(`Validated options.`);
 	options = Object.assign({
-		directory: ``,
+		directories: ``,
+		extension: ``,
 		options: {}
 	}, options);
 	
@@ -62,7 +74,7 @@ module.exports = function(options) {
 		await Promise.all(
 			// Loop through files.
 			files.map(function(file) {
-				return new Promise(function(resolve) {
+				return new Promise(function(resolve, reject) {
 					debug(`Processing file: '${file.path}'.`);
 					
 					assert(file.content !== null, `hoast-layout: No content found on file, read module needs to be called before this.`);
@@ -73,15 +85,42 @@ module.exports = function(options) {
 					}
 					debug(`File content is valid.`);
 					
-					// Get layout from rontmatter.
+					// Get layout from frontmatter.
 					let layout = options.layout;
 					if (file.frontmatter && file.frontmatter.layout) {
 						assert(typeof(file.frontmatter.layout) === `string`, `hoast-layout: layout specified in frontmatter must be of type string.`);
 						layout = file.frontmatter.layout;
 					}
+					let layoutPath;
 					// Get layout extension.
-					layout = join(hoast.options.source, options.directory, layout);
-					debug(`Using layout '${layout}'.`);
+					if (typeof(options.directories) === `string`) {
+						layoutPath = join(hoast.options.source, options.directories, layout, options.extension);
+						debug(`Testing accessible of layout at '${layout}'.`);
+						try {
+							fs.accessSync(layoutPath, fs.constants.R_OK);
+						} catch(error) {
+							debug(`Layout not accessible at '${layoutPath}'.`);
+							return reject(error);
+						}
+					} else {
+						// Search through directories.
+						for (let i = 0; i < options.directories.length; i++) {
+							layoutPath = join(hoast.options.source, options.directories[i], layout, options.extension);
+							debug(`Testing accessible of layout at '${layoutPath}'.`);
+							try {
+								// Check if this path yields results.
+								fs.accessSync(layoutPath, fs.constants.R_OK);
+								// If valid path found break out of the loop.
+								break;
+							} catch(error) {
+								if (i === options.directories.length - 1) {
+									debug(`No accessible layout found.`);
+									return reject(error);
+								}
+							}
+						}
+					}
+					debug(`Using layout at '${layoutPath}'.`);
 					
 					// Use given engine or retrieve transformer automatically.
 					const transformer = getTransformer(layout.split(`.`).pop());
@@ -92,7 +131,6 @@ module.exports = function(options) {
 					
 					// Combine metadata and file data.
 					const data = Object.assign({}, hoast.options.metadata, file.frontmatter, { content: file.content.data });
-					
 					// Override content and extension.
 					file.content.data = transformer.renderFile(layout, options.options, data).body;
 					
