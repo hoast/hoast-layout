@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2 (2018-09-12)
+For hoast version 0.1.0.
+
+### Fixed
+- Error regarding options.directories validation.
+
 ## 0.2.1 (2018-09-11)
 For hoast version 0.1.0.
 

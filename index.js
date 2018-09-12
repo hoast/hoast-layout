@@ -37,7 +37,7 @@ const getTransformer = function(extension) {
 const validateOptions = function(options) {
 	assert(typeof(options) === `object`, `hoast.layout: options must be of type object.`);
 	if (options.directories) {
-		assert(typeof(options.directories) === `string` || (Array.isArray(options.patterns) && options.patterns.length > 0 && typeof(options.patterns[0] === `string`)), `hoast-layout: directories must be of type string or an array of strings.`);
+		assert(typeof(options.directories) === `string` || (Array.isArray(options.directories) && options.directories.length > 0 && typeof(options.directories[0] === `string`)), `hoast-layout: directories must be of type string or an array of strings.`);
 	}
 	assert(typeof(options.layout) === `string`, `hoast-layout: layout is a required parameter and must be of type string.`);
 	if (options.options) {
