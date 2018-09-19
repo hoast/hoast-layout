@@ -1,14 +1,14 @@
 // Dependency modules.
 const test = require(`ava`);
 // Custom module.
-const Layout = require(`.`);
+const Layout = require(`../library`);
 
 test(`layout`, async function(t) {
 	// Create module options.
 	const options = {
-		directories: `test-src`,
-		layout: `d.hbs`,
-		patterns: `**/*.html`
+		directories: `test/layouts`,
+		layout: `a.hbs`,
+		patterns: `*.html`
 	};
 	
 	// Create dummy files.
@@ -35,7 +35,7 @@ test(`layout`, async function(t) {
 		},
 		frontmatter: {
 			description: `a module`,
-			layout: `e.hbs`
+			layout: `b.hbs`
 		}
 	}];
 	
@@ -63,12 +63,13 @@ test(`layout`, async function(t) {
 		},
 		frontmatter: {
 			description: `a module`,
-			layout: `e.hbs`
+			layout: `b.hbs`
 		}
 	}];
 	
 	// Test module.
 	const layout = Layout(options);
+	layout.before();
 	await layout({
 		options: {
 			source: `.`,

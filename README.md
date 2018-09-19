@@ -1,7 +1,8 @@
-[![Version master branch](https://img.shields.io/github/package-json/v/hoast/hoast-layout.svg?label=master&style=flat-square)](https://github.com/hoast/hoast-layout#readme)
 [![Version npm package](https://img.shields.io/npm/v/hoast-layout.svg?label=npm&style=flat-square)](https://npmjs.com/package/hoast-layout)
+[![Version GitHub master branch](https://img.shields.io/github/package-json/v/hoast/hoast-layout.svg?label=github&style=flat-square)](https://github.com/hoast/hoast-layout#readme)
+[![Version GitHub develop branch](https://img.shields.io/github/package-json/v/hoast/hoast-layout/develop.svg?label=github/develop&style=flat-square)](https://github.com/hoast/hoast-layout/tree/develop#readme)
 [![License agreement](https://img.shields.io/github/license/hoast/hoast-layout.svg?style=flat-square)](https://github.com/hoast/hoast-layout/blob/master/LICENSE)
-[![Travis-ci build status](https://img.shields.io/travis-ci/hoast/hoast-layout.svg?branch=master&style=flat-square)](https://travis-ci.org/hoast/hoast-layout)
+[![Travis-ci build status](https://img.shields.io/travis-ci/hoast/hoast-layout.svg?label=travis&branch=master&style=flat-square)](https://travis-ci.org/hoast/hoast-layout)
 [![Open issues on GitHub](https://img.shields.io/github/issues/hoast/hoast-layout.svg?style=flat-square)](https://github.com/hoast/hoast-layout/issues)
 
 # hoast-layout
@@ -20,16 +21,27 @@ $ npm install hoast-layout
 
 ### Parameters
 
-* `directories` **{Array|string}**: A string or array of string leading to the directories containing the layouts. If an array is provided it will search through the directories in the given order and use the first valid result. If no directory is given it will assume the root source directory.
+* `directories`: A string or array of string leading to the directories containing the layouts. If an array is provided it will search through the directories in the given order and use the first valid result. If no directory is given it will assume the root source directory.
+  * Type: `String` or `Array of Strings`
 	* Required: `no`
-* `extension` **{String}**: The extension of the layout. This option can be ignored and any extension can be provided by the default layout option or the frontmatter.
+* `extension`: The extension of the layout. This option can be ignored and any extension can be provided by the default layout option or the frontmatter. The format should only include the extension without any punctuation before the string, for example `md` instead of `.md`.
+  * Type: `String`
   * Required: `no`
-* `layout` **{String}**: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using a field named `layout`.
+* `layout`: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using a field named `layout`.
+  * Type: `String`
 	* Required: `yes`
-* `options` **{Object}**: Options given to the [JSTransformer](https://github.com/jstransformers/jstransformer#readme).
+* `options`: Options given to the [JSTransformer](https://github.com/jstransformers/jstransformer#readme).
+  * Type: `Object`
 	* Default: `{}`
-* `patterns` **{Array|string}**: A string or an array of strings which gets used to match files using glob patterns. See [nanomatch](https://github.com/micromatch/nanomatch#readme) for more details on the patterns.
-	* Required: `no`
+* `patterns`: Glob patterns to match file paths with. If the engine function is set it will only give the function any files matching the pattern.
+  * Type: `String` or `Array of strings`
+	* Default: `[ '**/*.md', '**/*.markdown' ]`
+* `patternOptions`: Options for the glob pattern matching. See [planckmatch options](https://github.com/redkenrok/node-planckmatch#options) for more details on the pattern options.
+  * Type: `Object`
+  * Default: `{}`
+* `patternOptions.all`: This options is added to `patternOptions`, and determines whether all patterns need to match instead of only one.
+  * Type: `Boolean`
+  * Default: `false`
 
 > From 0.2.0 and up the `directory` option has been deprecated and is replaced by the `directories` option.
 
@@ -44,7 +56,10 @@ $ npm install hoast-layout
     "hoast-layout": {
       "directory": "layouts",
       "layout": "page.hbs",
-      "patterns": "**/*.html"
+      "patterns": "**/*.html",
+      "patternOptions": {
+        "globstar": true
+      }
     }
   }
 }
@@ -62,7 +77,10 @@ Hoast(__dirname)
   .use(layout({
     directory: `layouts`
     layout: `page.hbs`,
-    patterns: `**/*.html`
+    patterns: `**/*.html`,
+    patternOptions: {
+      globstar: true
+    }
   }))
   .process();
 ```
