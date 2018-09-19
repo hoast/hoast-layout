@@ -1,4 +1,5 @@
 [![Version npm package](https://img.shields.io/npm/v/hoast-layout.svg?label=npm&style=flat-square)](https://npmjs.com/package/hoast-layout)
+[![Version npm package @next](https://img.shields.io/npm/v/hoast-layout/next.svg?label=npm/next&style=flat-square)](https://npmjs.com/package/hoast-layout/v/next)
 [![Version GitHub master branch](https://img.shields.io/github/package-json/v/hoast/hoast-layout.svg?label=github&style=flat-square)](https://github.com/hoast/hoast-layout#readme)
 [![Version GitHub develop branch](https://img.shields.io/github/package-json/v/hoast/hoast-layout/develop.svg?label=github/develop&style=flat-square)](https://github.com/hoast/hoast-layout/tree/develop#readme)
 [![License agreement](https://img.shields.io/github/license/hoast/hoast-layout.svg?style=flat-square)](https://github.com/hoast/hoast-layout/blob/master/LICENSE)
