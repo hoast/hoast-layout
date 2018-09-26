@@ -62,10 +62,7 @@ $ npm install hoast-layout
     "hoast-layout": {
       "directory": "layouts",
       "layout": "page.hbs",
-      "patterns": "**/*.html",
-      "patternOptions": {
-        "globstar": true
-      }
+      "patterns": "*.html"
     }
   }
 }
@@ -83,10 +80,7 @@ Hoast(__dirname)
   .use(layout({
     directory: `layouts`
     layout: `page.hbs`,
-    patterns: `**/*.html`,
-    patternOptions: {
-      globstar: true
-    }
+    patterns: `*.html`
   }))
   .process();
 ```
