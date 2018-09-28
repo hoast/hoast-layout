@@ -50,7 +50,7 @@ test(`layout`, async function(t) {
 		path: `b.html`,
 		content: {
 			type: `string`,
-			data: `<html>\n	<head>\n		<title>hoast layout</title>\n		<meta name="description" content="a module">\n	</head>\n	<body>\n		<p>file content</p>\n	</body>\n</html>`
+			data: `<html><head><title>hoast layout</title><meta name="description" content="a module"></head><body><p>file content</p></body></html>`
 		},
 		frontmatter: {
 			description: `a module`
@@ -59,7 +59,7 @@ test(`layout`, async function(t) {
 		path: `c.html`,
 		content: {
 			type: `string`,
-			data: `<html>\n	<head>\n		<meta name="description" content="a module">\n		<title>hoast layout</title>\n	</head>\n	<body>\n		<p>file content</p>\n	</body>\n</html>`
+			data: `<html><head><meta name="description" content="a module"><title>hoast layout</title></head><body><p>file content</p></body></html>`
 		},
 		frontmatter: {
 			description: `a module`,
