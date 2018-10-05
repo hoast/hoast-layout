@@ -5,8 +5,8 @@ const assert = require(`assert`),
 	fs = require(`fs`),
 	path = require(`path`);
 // Dependency modules.
-const parse = require(`planckmatch/library/parse`),
-	match = require(`planckmatch/library/match`);
+const parse = require(`planckmatch/parse`),
+	match = require(`planckmatch/match`);
 const jstransformer = require(`jstransformer`),
 	totransformer = require(`inputformat-to-jstransformer`);
 
@@ -15,26 +15,53 @@ const layoutCache = [],
 	transformersCache = {};
 
 /**
- * Validates options' property types.
+ * Validate properties of options.
  * @param {Object} options The module options.
  */
 const validateOptions = function(options) {
-	assert(
-		typeof(options) === `object`,
-		`hoast.layout: options must be of type object.`
-	);
-	
-	if (options.directories) {
-		assert(
-			typeof(options.directories) === `string` || (Array.isArray(options.directories) && options.directories.length > 0 && typeof(options.directories[0] === `string`)),
-			`hoast-layout: directories must be of type string or an array of strings.`
-		);
+	if (!options) {
+		// Return since no option is required.
+		return;
 	}
 	
 	assert(
-		typeof(options.layout) === `string`,
-		`hoast-layout: layout is a required parameter and must be of type string.`
+		typeof(options) === `object`,
+		`hoast-layout: options must be of type object.`
 	);
+	
+	/**
+	 * Validate a potential array.
+	 * @param {Object} property Name of property to validate.
+	 * @param {String} type Object type.
+	 */
+	const validateArray = function(property, type) {
+		property = options[property];
+		const message = `hoast-layout: ${property} must be of type ${type} or an array of ${type}s.`;
+		if (Array.isArray(property)) {
+			property.forEach(function(item) {
+				assert(
+					typeof(item) === type,
+					message
+				);
+			});
+		} else {
+			assert(
+				typeof(property) === type,
+				message
+			);
+		}
+	};
+	
+	if (options.directories) {
+		validateArray(`directories`, `string`);
+	}
+	
+	if (options.layouts) {
+		validateArray(`layouts`, `string`);
+	}
+	if (options.wrappers) {
+		validateArray(`wrappers`, `string`);
+	}
 	
 	if (options.options) {
 		assert(
@@ -44,10 +71,7 @@ const validateOptions = function(options) {
 	}
 	
 	if (options.patterns) {
-		assert(
-			typeof(options.patterns) === `string` || (Array.isArray(options.patterns) && options.patterns.length > 0 && typeof(options.patterns[0] === `string`)),
-			`hoast-layout: patterns must be of type string or an array of string.`
-		);
+		validateArray(`patterns`, `string`);
 	}
 	if (options.patternOptions) {
 		assert(
@@ -68,6 +92,7 @@ const validateOptions = function(options) {
  * @param {String} value The string to match with the expressions.
  * @param {RegExps|Array} expressions The regular expressions to match with.
  * @param {Boolean} all Whether all patterns need to match.
+ * @returns {Boolean} Whether the value matched the criteria.
  */
 const isMatch = function(value, expressions, all) {
 	// If no expressions return early as valid.
@@ -88,15 +113,27 @@ const isMatch = function(value, expressions, all) {
 };
 
 /**
- * 
- * @param {String} directory 
- * @param {String|Array} subDirectories 
- * @param {String} layoutName 
- * @param {String} extension 
+ * Returns the valid file path found in any of the subdirectories.
+ * @param {String} directory Absolute path to root directory.
+ * @param {Array|String} subDirectories Subdirectories to search through.
+ * @param {String} fileName The relative file path to the subdirectory.
+ * @param {String} extension The file extension.
+ * @returns {String} The valid path of the file, or null if no valid path found.
  */
-const getLayout = function(directory, subDirectory, layoutName, extension) {
-	let layoutPath = path.join(directory, subDirectory, layoutName.concat(extension));
-	debug(`Testing accessibility of file '${layoutName}'.`);
+const getLayout = function(directory, subDirectories, fileName, extension) {
+	if (Array.isArray(subDirectories)) {
+		let result = null;
+		for (let i = 0; i < subDirectories.length; i++) {
+			result = getLayout(directory, subDirectories[i], fileName, extension);
+			if (result) {
+				return result;
+			}
+		}
+		return;
+	}
+	
+	let layoutPath = path.join(directory, subDirectories, fileName.concat(extension));
+	debug(`Testing accessibility of file '${fileName}'.`);
 	
 	// Check if path already in cache.
 	if (layoutCache.indexOf(layoutPath) >= 0) {
@@ -120,51 +157,88 @@ const getLayout = function(directory, subDirectory, layoutName, extension) {
 	}
 };
 
-const selectLayout = function(directory, subDirectories, fileName, extension) {
-	if (typeof(subDirectories) === `string`) {
-		return getLayout(directory, subDirectories, fileName, extension);
+/**
+ * Transform the content using a layout.
+ * @param {String} layoutPath Absolute path to the layout.
+ * @param {Object} options The transformer options.
+ * @param {String} content File content to transform.
+ * @param {Object} metadata Any metadata of the file to give to the layout.
+ * @returns {String} Transformed content.
+ */
+const transform = function(options, layoutPath, content, metadata) {
+	const extension = layoutPath.split(`.`).pop();
+	// Get transformer.
+	let transformer;
+	// If transformer already cached return that.
+	if (extension in transformersCache) {
+		transformer = transformersCache[extension];
+	} else {
+		// Retrieve the transformer if available.
+		transformer = totransformer(extension);
+		transformersCache[extension] = transformer ? jstransformer(transformer) : false;
+		transformer = transformersCache[extension];
+	}
+	// Still no transformer found return content as is.
+	if (!transformer) {
+		debug(`No valid transformer found for extension '${extension}'.`);
+		return content;
 	}
 	
-	// Search through directories.
-	let result = null;
-	for (let i = 0; i < subDirectories.length; i++) {
-		result = getLayout(directory, subDirectories[i], fileName, extension);
-		if (result) {
-			return result;
-		}
-	}
-	return;
+	// Override content and extension.
+	metadata.content = content;
+	return transformer.renderFile(layoutPath, options, metadata).body;
 };
 
 /**
- * Matches the extension to the transformer.
- * @param {String} extension The layouts extension.
+ * Use layouts on content.
+ * @param {*} options Module options.
+ * @param {*} layoutNames 
+ * @param {*} content 
+ * @param {*} metadata 
  */
-const getTransformer = function(extension) {
-	// If transformer already cached return that.
-	if (extension in transformersCache) {
-		return transformersCache[extension];
+const layout = function(source, options, layoutNames, content, metadata) {
+	// Iterate over array.
+	if (Array.isArray(layoutNames)) {
+		// Call itself for each layout name.
+		layoutNames.forEach(function(layoutName) {
+			content = layout(source, options, layoutName, content, metadata);
+		});
+		// Return finished content.
+		return content;
 	}
 	
-	// Retrieve the transformer if available.
-	const transformer = totransformer(extension);
-	transformersCache[extension] = transformer ? jstransformer(transformer) : false;
+	// Get path to layout file.
+	const layoutPath = getLayout(source, options.directories, layoutNames, options.extension);
+	if (!layoutPath) {
+		debug(`No accessible file found as layout for '${layoutNames}', therefore ignored.`);
+		return content;
+	}
+	debug(`Using layout at '${layoutPath}'.`);
 	
-	// Return transformer.
-	return transformersCache[extension];
+	// Transform content.
+	return transform(options.options, layoutPath, content, metadata);
 };
 
 /**
  * Transforms files content using layouts.
  * @param {Object} options The module options.
+ * @returns {Function} The module's function.
  */
 module.exports = function(options) {
 	debug(`Initializing module.`);
 	
-	// Legacy support for the directory option.
+	// Legacy support for the directory and layout option.
 	if (options.directory && !options.directories) {
-		debug(`the 'directory' options has been deprecated and replaced with 'directories', see the documentation for more information.`);
+		debug(`The 'directory' options has been deprecated and replaced with 'directories', see the documentation for more information.`);
 		options.directories = options.directory;
+	}
+	if (options.layout && !options.layouts) {
+		debug(`The 'layout' options has been deprecated and replaced with 'layouts', see the documentation for more information.`);
+		options.layouts = options.layout;
+	}
+	if (options.wrapper && !options.wrappers) {
+		debug(`The 'wrapper' options has been deprecated and replaced with 'wrappers', see the documentation for more information.`);
+		options.wrappers = options.wrapper;
 	}
 	
 	validateOptions(options);
@@ -181,7 +255,7 @@ module.exports = function(options) {
 		await Promise.all(
 			// Loop through files.
 			files.map(function(file) {
-				return new Promise((resolve, reject) => {
+				return new Promise((resolve) => {
 					debug(`Processing file: '${file.path}'.`);
 					
 					// Check if read module has been used.
@@ -204,30 +278,31 @@ module.exports = function(options) {
 					debug(`File is valid for processing.`);
 					
 					// Get layout from frontmatter.
-					let layoutName = options.layout;
-					if (file.frontmatter && file.frontmatter.layout) {
-						assert(typeof(file.frontmatter.layout) === `string`, `hoast-layout: layout specified in frontmatter must be of type string.`);
-						layoutName = file.frontmatter.layout;
+					let layoutNames = options.layouts;
+					if (file.frontmatter) {
+						if (file.frontmatter.layouts) {
+							debug(`Using layouts defined in frontmatter.`);
+							layoutNames = file.frontmatter.layouts;
+						} else if (file.frontmatter.layout) {
+							debug(`Using layout defined in frontmatter.`);
+							layoutNames = file.frontmatter.layout;
+						}
 					}
-					debug(`Searching layout '${layoutName}'.`);
-					
-					let layoutPath = selectLayout(hoast.options.source, options.directories, layoutName, options.extension);
-					if (!layoutPath) {
-						reject(`No accessible file found as layout for ${file.path}.`);
-					}
-					debug(`Using layout at '${layoutPath}'.`);
-					
-					// Use given engine or retrieve transformer automatically.
-					const transformer = getTransformer(layoutPath.split(`.`).pop());
-					if (!transformer) {
-						debug(`No valid transformer found for extension '${layoutPath.split(`.`).pop()}'.`);
-						return resolve();
-					}
+					debug(`Found layout names '${layoutNames}'.`);
 					
 					// Combine metadata and file data.
-					const data = Object.assign({}, hoast.options.metadata, file.frontmatter, { content: file.content.data });
-					// Override content and extension.
-					file.content.data = transformer.renderFile(layoutPath, options.options, data).body;
+					const metadata = Object.assign({}, hoast.options.metadata, file.frontmatter);
+					
+					// Go over layouts.
+					let content = layout(hoast.options.source, options, layoutNames, file.content.data, metadata);
+					
+					// Wrappers.
+					if (options.wrappers) {
+						content = layout(hoast.options.source, options, options.wrappers, content, metadata);
+					}
+					
+					// Write content to file content data.
+					file.content.data = content;
 					
 					debug(`Rendered file.`);
 					resolve();

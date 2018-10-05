@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 (Unreleased)
+For hoast `v1.0.0`
+## Added
+- `wrappers` option added to provided an additional layer of layouts.
+- `layouts` option added to support an array of items.
+## Removed
+- `layout` option deprecated and replaced with `layouts` option.
+
 ## 1.0.1 (2018-09-28)
 For hoast `v1.0.0`.
 ### Changed

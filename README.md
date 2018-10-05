@@ -33,9 +33,12 @@ $ npm install hoast-layout
 * `extension`: The extension of the layout. This option can be ignored and any extension can be provided by the default layout option or the frontmatter. The format should only include the extension without any punctuation before the string, for example `md` instead of `.md`.
   * Type: `String`
   * Required: `no`
-* `layout`: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using a field named `layout`.
-  * Type: `String`
-	* Required: `yes`
+* `layouts`: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using a field named `layout`.
+  * Type: `String or Array of strings`
+	* Required: `no`
+* `wrappers`: Path to optional secondary layout to wrap the file's content in after the main layout has done its job. Do note this can not be overwritten via the frontmatter.
+  * Type: `String or Array of strings`
+  * Required: `no`
 * `options`: Options given to the [JSTransformer](https://github.com/jstransformers/jstransformer#readme).
   * Type: `Object`
 	* Default: `{}`
@@ -61,7 +64,8 @@ $ npm install hoast-layout
     "read": {},
     "hoast-layout": {
       "directory": "layouts",
-      "layout": "page.hbs",
+      "layouts": "default.hbs",
+      "wrappers": "wrapper.hbs",
       "patterns": "*.html"
     }
   }
@@ -79,7 +83,8 @@ Hoast(__dirname)
   .use(read())
   .use(layout({
     directory: `layouts`
-    layout: `page.hbs`,
+    layouts: `default.hbs`,
+    wrappers: `wrapper.hbs`,
     patterns: `*.html`
   }))
   .process();
