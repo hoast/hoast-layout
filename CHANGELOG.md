@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 (Unreleased)
+## 1.1.0 (2018-10-05)
 For hoast `v1.0.0`
 ## Added
 - `wrappers` option added to provided an additional layer of layouts.

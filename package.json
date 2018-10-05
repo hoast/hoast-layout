@@ -4,7 +4,7 @@
     "url": "https://rondekker.nl"
   },
   "name": "hoast-layout",
-  "version": "1.1.0-alpha.0",
+  "version": "1.1.0",
   "description": "Hoast module used to transform the content of files using layouts.",
   "license": "ISC",
   "keywords": [
@@ -40,8 +40,8 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "codecov": "^3.1.0",
-    "debug": "^3.1.0",
-    "eslint": "^5.3.0",
+    "debug": "^4.0.1",
+    "eslint": "^5.6.1",
     "jstransformer-handlebars": "^1.1.0",
     "nyc": "^13.0.1"
   }
