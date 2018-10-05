@@ -277,6 +277,10 @@ module.exports = function(options) {
 					
 					debug(`File is valid for processing.`);
 					
+					// Combine metadata and file data.
+					const metadata = Object.assign({}, hoast.options.metadata, file.frontmatter);
+					let content = file.content.data;
+					
 					// Get layout from frontmatter.
 					let layoutNames = options.layouts;
 					if (file.frontmatter) {
@@ -288,15 +292,13 @@ module.exports = function(options) {
 							layoutNames = file.frontmatter.layout;
 						}
 					}
-					debug(`Found layout names '${layoutNames}'.`);
+					// Go over layouts listed.
+					if (layoutNames) {
+						debug(`Found layout names '${layoutNames}'.`);
+						content = layout(hoast.options.source, options, layoutNames, content, metadata);
+					}
 					
-					// Combine metadata and file data.
-					const metadata = Object.assign({}, hoast.options.metadata, file.frontmatter);
-					
-					// Go over layouts.
-					let content = layout(hoast.options.source, options, layoutNames, file.content.data, metadata);
-					
-					// Wrappers.
+					// Go over wrappers listed.
 					if (options.wrappers) {
 						content = layout(hoast.options.source, options, options.wrappers, content, metadata);
 					}
