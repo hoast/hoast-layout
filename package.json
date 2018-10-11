@@ -4,7 +4,7 @@
     "url": "https://rondekker.nl"
   },
   "name": "hoast-layout",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Hoast module used to transform the content of files using layouts.",
   "license": "ISC",
   "keywords": [

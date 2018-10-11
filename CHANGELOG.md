@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1 (unreleased)
+For hoast `v1.0.0`.
+### Changed
+- Removed the `before` function from the module.
+
 ## 1.1.0 (2018-10-05)
 For hoast `v1.0.0`
 ## Added

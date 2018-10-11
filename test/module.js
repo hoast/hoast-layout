@@ -69,7 +69,6 @@ test(`layout`, async function(t) {
 	
 	// Test module.
 	const layout = Layout(options);
-	layout.before();
 	await layout({
 		options: {
 			source: `.`,
