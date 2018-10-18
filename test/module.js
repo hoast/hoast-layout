@@ -17,7 +17,10 @@ const emulateHoast = async function(options, mod, files) {
 		await mod.before(hoast);
 	}
 	
-	files = await mod(hoast, files);
+	const temp = await mod(hoast, files);
+	if (temp) {
+		files = temp;
+	}
 	
 	if (mod.after) {
 		await mod.after(hoast);
