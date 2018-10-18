@@ -1,9 +1,9 @@
 # Changelog
 
-## 1.1.1 (unreleased)
-For hoast `v1.0.0`.
+## 1.2.0 (2018-10-18)
+For hoast `v1.1.0`.
 ### Changed
-- Removed the `before` function from the module.
+- Reduced module complexity by using new `hoast.helper.parse` and `hoast.helper.match` helper functions.
 
 ## 1.1.0 (2018-10-05)
 For hoast `v1.0.0`

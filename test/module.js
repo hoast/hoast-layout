@@ -1,16 +1,32 @@
 // Dependency modules.
-const test = require(`ava`);
+const Hoast = require(`hoast`),
+	test = require(`ava`);
 // Custom module.
 const Layout = require(`../library`);
 
-test(`layout`, async function(t) {
-	// Create module options.
-	const options = {
-		directories: `test/layouts`,
-		layout: `a.hbs`,
-		patterns: `*.html`
-	};
+/**
+ * Emulates a simplified Hoast process for testing purposes.
+ * @param {Object} options Hoast options.
+ * @param {Function} mod Module function.
+ * @param {Array of objects} files The files to process and return.
+ */
+const emulateHoast = async function(options, mod, files) {
+	const hoast = Hoast(__dirname, options);
 	
+	if (mod.before) {
+		await mod.before(hoast);
+	}
+	
+	files = await mod(hoast, files);
+	
+	if (mod.after) {
+		await mod.after(hoast);
+	}
+	
+	return files;
+};
+
+test(`layout`, async function(t) {
 	// Create dummy files.
 	const files = [{
 		path: `a.txt`,
@@ -68,15 +84,16 @@ test(`layout`, async function(t) {
 	}];
 	
 	// Test module.
-	const layout = Layout(options);
-	await layout({
-		options: {
-			source: `.`,
-			metadata: {
-				title: `hoast layout`
-			}
+	await emulateHoast({
+		source: `.`,
+		metadata: {
+			title: `hoast layout`
 		}
-	}, files);
+	}, Layout({
+		directories: `test/layouts`,
+		layout: `a.hbs`,
+		patterns: `*.html`
+	}), files);
 	
 	// Compare files.
 	t.deepEqual(files, filesOutcome);
