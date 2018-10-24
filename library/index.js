@@ -167,7 +167,7 @@ module.exports = function(options) {
 						return resolve();
 					}
 					// Check against glob patterns.
-					if (!hoast.helper.match(file.path, this.expressions, options.patternOptions.all)) {
+					if (!hoast.helpers.matchExpressions(file.path, this.expressions, options.patternOptions.all)) {
 						debug(`File path not valid for processing.`);
 						return resolve();
 					}
@@ -213,7 +213,7 @@ module.exports = function(options) {
 	mod.before = function(hoast) {
 		// Parse glob patterns into regular expressions.
 		if (options.patterns) {
-			this.expressions = hoast.helper.parse(options.patterns, options.patternOptions, true);
+			this.expressions = hoast.helpers.parsePatterns(options.patterns, options.patternOptions, true);
 			debug(`Patterns parsed into expressions: ${this.expressions}.`);
 		}
 	};
