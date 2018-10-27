@@ -175,24 +175,24 @@ module.exports = function(options) {
 					debug(`File is valid for processing.`);
 					
 					// Combine metadata and file data.
-					const metadata = Object.assign({}, hoast.options.metadata, file.frontmatter);
+					const metadata = Object.assign(hoast.options.metadata, file.frontmatter);
 					let content = file.content.data;
 					
-					// Get layout from frontmatter.
-					let layoutNames = options.layouts;
-					if (file.frontmatter) {
-						if (file.frontmatter.layouts !== undefined) {
+					// Get layout from front matter.
+					let layouts = options.layouts;
+					if (metadata) {
+						if (metadata.layouts !== undefined) {
 							debug(`Using layouts defined in frontmatter.`);
-							layoutNames = file.frontmatter.layouts;
-						} else if (file.frontmatter.layout !== undefined) {
+							layouts = metadata.layouts;
+						} else if (metadata.layout !== undefined) {
 							debug(`Using layout defined in frontmatter.`);
-							layoutNames = file.frontmatter.layout;
+							layouts = metadata.layout;
 						}
 					}
 					// Go over layouts listed.
-					if (layoutNames) {
-						debug(`Found layout names '${layoutNames}'.`);
-						content = layout(hoast.options.source, options, layoutNames, content, metadata);
+					if (layouts) {
+						debug(`Found layout names '${layouts}'.`);
+						content = layout(hoast.options.source, options, layouts, content, metadata);
 					}
 					
 					// Go over wrappers listed.

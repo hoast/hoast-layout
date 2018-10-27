@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.3 (2018-10-27)
+For hoast `v1.1.1`
+### Fixed
+- Combination of global metadata and front matter is now used to overwrite `options.layout` instead of only the front matter.
+
 ## 1.2.2 (2018-10-27)
 For hoast `v1.1.1`
 ### Fixed
