@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.2 (2018-10-27)
+For hoast `v1.1.1`
+### Fixed
+- Using `null` in the frontmatter for `layouts` or `layout` will now override which layouts are used, instead of being ignored.
+
 ## 1.2.1 (2018-10-24)
 For hoast `v1.1.1`
 ### Changed

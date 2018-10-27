@@ -181,10 +181,10 @@ module.exports = function(options) {
 					// Get layout from frontmatter.
 					let layoutNames = options.layouts;
 					if (file.frontmatter) {
-						if (file.frontmatter.layouts) {
+						if (file.frontmatter.layouts !== undefined) {
 							debug(`Using layouts defined in frontmatter.`);
 							layoutNames = file.frontmatter.layouts;
-						} else if (file.frontmatter.layout) {
+						} else if (file.frontmatter.layout !== undefined) {
 							debug(`Using layout defined in frontmatter.`);
 							layoutNames = file.frontmatter.layout;
 						}

@@ -33,7 +33,7 @@ $ npm install hoast-layout
 * `extension`: The extension of the layout. This option can be ignored and any extension can be provided by the default layout option or the frontmatter. The format should only include the extension without any punctuation before the string, for example `md` instead of `.md`.
   * Type: `String`
   * Required: `no`
-* `layouts`: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using a field named `layout`.
+* `layouts`: Path to default layout if the [frontmatter](https://github.com/hoast/hoast-frontmatter#readme) of the file does not specify another layout using a field named `layouts` or `layout`.
   * Type: `String or Array of strings`
 	* Required: `no`
 * `wrappers`: Path to optional secondary layout to wrap the file's content in after the main layout has done its job. Do note this can not be overwritten via the frontmatter.
