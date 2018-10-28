@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0 (2018-10-28)
+For hoast `v1.1.4`
+### Changed
+- Using `hoast.helpers.deepAssign` to deeply assign the `file.frontmatter` and `hoast.options.metadata` to an empty object for usage by the layouts.
+
 ## 1.2.3 (2018-10-27)
 For hoast `v1.1.1`
 ### Fixed

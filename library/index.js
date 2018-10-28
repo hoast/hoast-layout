@@ -174,34 +174,32 @@ module.exports = function(options) {
 					
 					debug(`File is valid for processing.`);
 					
-					// Combine metadata and file data.
-					const metadata = Object.assign(hoast.options.metadata, file.frontmatter);
-					let content = file.content.data;
+					// Combine global metadata and file front matter.
+					const metadata = {};
+					hoast.helpers.deepAssign(metadata, hoast.options.metadata, file.frontmatter);
 					
 					// Get layout from front matter.
 					let layouts = options.layouts;
 					if (metadata) {
 						if (metadata.layouts !== undefined) {
-							debug(`Using layouts defined in frontmatter.`);
+							debug(`Using layouts defined in front matter.`);
 							layouts = metadata.layouts;
 						} else if (metadata.layout !== undefined) {
-							debug(`Using layout defined in frontmatter.`);
+							debug(`Using layout defined in front matter.`);
 							layouts = metadata.layout;
 						}
 					}
+					
 					// Go over layouts listed.
 					if (layouts) {
 						debug(`Found layout names '${layouts}'.`);
-						content = layout(hoast.options.source, options, layouts, content, metadata);
+						file.content.data = layout(hoast.options.source, options, layouts, file.content.data, metadata);
 					}
 					
 					// Go over wrappers listed.
 					if (options.wrappers) {
-						content = layout(hoast.options.source, options, options.wrappers, content, metadata);
+						file.content.data = layout(hoast.options.source, options, options.wrappers, file.content.data, metadata);
 					}
-					
-					// Write content to file content data.
-					file.content.data = content;
 					
 					debug(`Rendered file.`);
 					resolve();
