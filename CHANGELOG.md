@@ -1,22 +1,23 @@
 # Changelog
 
+## 1.3.1 (2019-03-13)
+### Changed
++ Updated dependencies and development dependencies.
+
 ## 1.3.0 (2018-10-28)
 For hoast `v1.1.4`
 ### Changed
 - Using `hoast.helpers.deepAssign` to deeply assign the `file.frontmatter` and `hoast.options.metadata` to an empty object for usage by the layouts.
 
 ## 1.2.3 (2018-10-27)
-For hoast `v1.1.1`
 ### Fixed
 - Combination of global metadata and front matter is now used to overwrite `options.layout` instead of only the front matter.
 
 ## 1.2.2 (2018-10-27)
-For hoast `v1.1.1`
 ### Fixed
 - Using `null` in the frontmatter for `layouts` or `layout` will now override which layouts are used, instead of being ignored.
 
 ## 1.2.1 (2018-10-24)
-For hoast `v1.1.1`
 ### Changed
 - Updated dependencies.
 - Updated to reflect changes to `hoast`'s helpers.
@@ -27,7 +28,6 @@ For hoast `v1.1.0`.
 - Reduced module complexity by using new `hoast.helper.parse` and `hoast.helper.match` helper functions.
 
 ## 1.1.0 (2018-10-05)
-For hoast `v1.0.0`
 ## Added
 - `wrappers` option added to provided an additional layer of layouts.
 - `layouts` option added to support an array of items.
@@ -35,7 +35,6 @@ For hoast `v1.0.0`
 - `layout` option deprecated and replaced with `layouts` option.
 
 ## 1.0.1 (2018-09-28)
-For hoast `v1.0.0`.
 ### Changed
 - Updated `planckmatch` module from version `1.0.0` to `1.0.1`.
 
@@ -50,17 +49,14 @@ For hoast `v1.0.0`.
 > Do note option properties have changed, and are not backwards compatible.
 
 ## 0.2.2 (2018-09-12)
-For hoast `v0.1.0`.
 ### Fixed
 - Error regarding options.directories validation.
 
 ## 0.2.1 (2018-09-11)
-For hoast `v0.1.0`.
 ### Fixed
 - Error regarding renderer path fixed.
 
 ## 0.2.0 (2018-09-11)
-For hoast `v0.1.0`.
 ### Changed
 - `directory` parameter replaced by `directories` which allows for an array of possible layout sources to be given.
 
